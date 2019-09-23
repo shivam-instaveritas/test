@@ -22,7 +22,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'user'], function () {
 
     Route::group(['middleware' => ['auth']], function () {
         Route::get('/users', 'UserController@index');
-        Route::get('/users/{id}', 'UserController@show');
+        Route::get('/users/{id}', 'UserController@show')->middleware('age');
         Route::put('/users/{id}', 'UserController@update');
         Route::delete('/users/id', 'UserController@destroy');
         });
