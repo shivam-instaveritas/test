@@ -8,6 +8,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Mail;
 
 class SendMail implements ShouldQueue
 {
@@ -30,6 +31,6 @@ class SendMail implements ShouldQueue
      */
     public function handle()
     {
-
+        Mail::to($this->user->email)->send(new SendWelcomeEmail($this->user->name));
     }
 }

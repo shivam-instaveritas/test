@@ -15,15 +15,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(['prefix' => 'api'], function () {
+Route::group(['prefix' => 'api', 'namespace' => 'user'], function () {
+    Route::get('/users/create', 'UserController@create');
+    Route::post('/users', 'UserController@store');
+
+
     Route::group(['middleware' => ['auth']], function () {
-        Route::group(['namespace' => 'user'], function () {
-            Route::get('/users', 'UserController@index');
-            Route::get('/users/{id}', 'UserController@show');
-            Route::get('/users/create', 'UserController@create');
-            Route::post('/users', 'UserController@store');
-            Route::put('/users/{id}', 'UserController@update');
-            Route::delete('/users/id', 'UserController@destroy');
+        Route::get('/users', 'UserController@index');
+        Route::get('/users/{id}', 'UserController@show');
+        Route::put('/users/{id}', 'UserController@update');
+        Route::delete('/users/id', 'UserController@destroy');
         });
-    });
 });

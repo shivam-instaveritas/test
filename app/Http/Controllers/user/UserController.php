@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\user;
 
+use App\Events\NewUserCreated;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\AgeMiddleware;
 use App\Http\Repositories\UserRepository;
 use App\Http\Requests\UserStoreRequest;
 use App\Jobs\SendMail;
@@ -47,6 +49,10 @@ class UserController extends Controller
         $data = $request->all();
         $newUser = $this->userRepository->store($data);
         // dispatch(new SendMail($newUser));
+        event(new NewUserCreated($newUser));
+
+        Cache::put($newUser, $newUser->name, 60);
+
         return response('success', 200);
     }
 
@@ -58,6 +64,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
+        $this->middleware(AgeMiddleware::class);
         return $this->userRepository->find($id);
     }
 
@@ -81,6 +88,9 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        $this->authorize('update', $this->userRepository->find($id));
+
         $this->userRepository->update($id, $request->all());
 
         return response('success', 200);
@@ -94,6 +104,11 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('update', $this->userRepository->find($id));
+
         $this->userRepository->delete($id);
+
+        return response('success', 200);
+
     }
 }

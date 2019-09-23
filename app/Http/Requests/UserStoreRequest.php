@@ -30,7 +30,9 @@ class UserStoreRequest extends FormRequest
             'email.email'       => 'write correct email',
             'email.unique'      => 'email already taken',
 
-            'username.unique'   => 'uername already taken'
+            'username.unique'   => 'uername already taken',
+
+            'age.gt'            => 'age should be greater than 18',
         ];
     }
 
@@ -43,7 +45,7 @@ class UserStoreRequest extends FormRequest
     {
         return [
             'name'      => 'required | max:50',
-            'age'       => 'required',
+            'age'       => 'required | gt:18',
             'email'     => 'required | email | unique:users',
             'username'  => 'required | unique:users'
         ];

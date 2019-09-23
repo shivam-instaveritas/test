@@ -18,4 +18,14 @@ class UserPolicy
     {
         //
     }
+
+    public function update($user)
+    {
+        return $user->id === auth()->user()->id;
+    }
+
+    public function delete($user)
+    {
+        return $user->id === auth()->user()->id;
+    }
 }

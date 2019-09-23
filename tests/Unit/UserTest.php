@@ -38,7 +38,7 @@ class UserTest extends TestCase
 
     public function test_update_user()
     {
-        $this->withoutExceptionHandling();
+
         $data = factory(User::class)->make();
 
         $data = [
@@ -63,4 +63,17 @@ class UserTest extends TestCase
     }
 
 
+
+    public function test_delete_user()
+    {
+        $user = factory(User::class)->create();
+
+        $this->delete('/api/users/'.$user->id)->assertStatus(200);
+
+        //users in db should be zero
+
+        $usersCount = User::all()->count();
+
+        $this->assertEquals($usersCount, 0);
+    }
 }
